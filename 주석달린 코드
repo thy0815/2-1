@@ -1,0 +1,54 @@
+import csv #csv 파일을 사용하겠다는 의미
+
+s = open("생명과학실험.csv") #s라는 곳에 생명과학실험(답지) csv 파일을 열어준다
+g = csv.reader(s) #csv파일을 읽어준다
+answer = []
+number = []
+score = [] #세 개의 리스트를 만들어준다
+for raw in g :
+    answer.append(raw[1]) #answer 리스트에 두번째 열을 모두 더해준다
+    number.append(raw[0]) #number 리스트에 첫번째 열을 모두 더해준다
+    score.append(raw[2]) #score 리스트에 세번째 열을 모두 더해준다
+
+s.close() 
+
+import csv
+
+f1 = open( "2604김소현.csv") 
+g1 = csv.reader(f1) 
+stanswer = [] #학생의 리스트를 만들어준다
+
+for raw in g1 :
+    stanswer.append(raw[1])
+f1.close() 
+
+new = []
+for i in range(0,len(answer)) :
+    n = answer[i].split('/')
+    new.append(n) #슬래쉬를 기준으로 자른 후 자른 것을 새 리스트에 모두 더해준다
+
+
+점수 = 0
+오답 = []
+그림문제 = []
+for j in range(0, len(stanswer)) :
+    txt = stanswer[j].upper() #소문자를 다 대문자로 만들어준다
+    sc = float(score[j]) #파일의 소수점을 없애준다
+    cp = True 
+    for i in range(len(new[j])) :
+        ans = new[j][i].upper()
+        if ans in txt :
+            cp = True
+        if ans not in txt :
+            cp = False
+            오답.append(number[j])
+            break #스플릿으로 잘라준 학생의 답안과 답안지의 답이 같을 경우 해당하는 점수를 리스트에 더해주고, 그렇지 않은경우 오답 리스트에 번호가 더해지며 점수는 부여되지 않는다. 
+        if str(ans) == '그림생략' :
+            n = number[j]
+            그림문제.append(n) #그림문제의 경우 그림생략이라는 명령어가 나오도록 한다
+    if cp :
+        점수 += sc
+
+print('채점 결과 : ',f1.name,'의',s.name,'과목의 총점은',점수,'점입니다')
+print('확인 사항 :',str(그림문제),'번은 그림을 그리는 문제이므로 시험지를 확인해주세요')
+print('틀린 문제 :',str(오답),'번 입니다')
